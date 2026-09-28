@@ -15,7 +15,6 @@ pipeline earns credit; *"80% seemed reasonable"* does not.
 > Missing your own targets next unit costs you nothing. Setting a target so
 > easy you can't miss it does.
 
----
 
 ## 1. Retrieved chunks contain the answer
 
@@ -23,8 +22,11 @@ For at least 4 of my 5 test questions, the retrieved chunks include one that
 contains the answer.
 
 **Why this target:**
-<!-- e.g. "One of my questions is about a topic only two documents mention, so
-     I expect that one to be hard." -->
+All five of my test questions came back with distances well under my cutoff
+(0.18–0.34), so I expect this to hold most of the time. I'm not setting 5 of
+5 because a rarer topic in my corpus could still come back weaker on a
+different day, and I'd rather have room to miss once than call it broken for
+a single fluke.
 
 ---
 
@@ -33,10 +35,11 @@ contains the answer.
 Every answer the system produces names at least one source document.
 
 **Why this target:**
-<!-- Why all five and not four? What about your setup makes that achievable —
-     or what would have to go wrong for it not to be? -->
-
----
+The grounding prompt requires the model to always cite a source, and every
+test answer I've seen so far has done this without exception. I'm setting
+5 of 5 rather than 4 of 5 because this isn't really a retrieval-quality
+question — it's whether the model follows a simple instruction — so I expect
+it to hold unless the gate itself misfires.
 
 ## 3. The relevance gate stops out-of-corpus questions
 
@@ -55,45 +58,31 @@ in at least 4 of 5 tries.
 
 ---
 
-## 4. Something about your chunks
+## 4. Chunks are answerable on their own
 
-<!-- YOU WRITE THIS ONE.
-
-     How would you know if your chunks were the right size? Name something
-     countable or observable.
-
-     Examples of the right shape — don't copy these, they should come from
-     what you actually saw in Milestone 3:
-       - "At least 4 of 5 sampled chunks read as a complete thought, with no
-          sentence cut in half at either end."
-       - "No chunk is shorter than 200 characters, since anything below that
-          in my corpus turned out to be a heading with no content under it." -->
-
-
+If I sample 10 chunks at random from across the corpus, at least 8 of them
+should be answerable using only that chunk's own text, with no need for
+what comes before or after.
 
 **Why this target:**
+My first sample of 5 came out 3/5. Two of those failures were about missing
+context or merged topics, not something structurally broken — but 5 chunks
+is too small a sample to trust. I'm sampling 10 for a steadier read, and
+setting 8 as a stretch above my first result.
 
 
+## 5. Answers return quickly
 
----
-
-## 5. Your choice
-
-<!-- YOU WRITE THIS ONE TOO.
-
-     Pick something you actually care about getting right. It could be about
-     speed, about refusals, about a particular kind of question your corpus
-     handles badly, about source attribution being correct rather than merely
-     present — anything, as long as it names a number or an observable
-     outcome. -->
-
-
+For at least 4 of my 5 test questions, `ask` returns a complete answer in
+under 8 seconds.
 
 **Why this target:**
+Even during a Gemini outage, retrieval and embedding alone took 2.3–4.8
+seconds per question, before the model call even started. 8 seconds gives
+real room for the model's response time on top of that, without being so
+loose that a genuinely slow answer would still pass.
 
 
-
----
 
 <!-- ─────────────────────────────────────────────────────────────────────────
      UNIT 2 — read this before you change anything above.
