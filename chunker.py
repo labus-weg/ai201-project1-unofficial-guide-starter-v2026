@@ -79,7 +79,7 @@ def fallback_split(
 
     return chunks
 
-
+MIN_CHUNK_CHARS = 60
 def split_documents(documents: list[Document]) -> list[Chunk]:
     """
     Split documents into chunks. ⚠️ REPLACE THE BODY OF THIS IN MILESTONE 3.
@@ -97,7 +97,35 @@ def split_documents(documents: list[Document]) -> list[Chunk]:
       - Would splitting on paragraph breaks keep more thoughts intact than
         splitting on a character count?
     """
-    return fallback_split(documents)
+    chunks: list[Chunk] = []
+    for doc in documents:
+        paragraphs = [p.strip() for p in doc.text.split("\n\n") if p.strip()]
+
+        merged: list[str] = []
+        buffer = ""
+        for para in paragraphs:
+            buffer = f"{buffer}\n\n{para}" if buffer else para
+            if len(buffer) >= MIN_CHUNK_CHARS:
+                merged.append(buffer)
+                buffer = ""
+        if buffer:
+            if merged:
+                merged[-1] = f"{merged[-1]}\n\n{buffer}"
+            else:
+                merged.append(buffer)
+
+        for i, text in enumerate(merged):
+            chunks.append(
+                Chunk(
+                    text=text,
+                    source=doc.source,
+                    index=i,
+                    produced_by="chunker.py::split_documents",
+                )
+            )
+
+    return chunks
+
 
 
 def describe(chunks: list[Chunk]) -> str:
