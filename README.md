@@ -2,32 +2,22 @@
 
 Nafisa Nawrin Labonno — campus_life corpus
 
-The Unofficial Guide answers plain questions about student life from a corpus of 88 short posts: housing, dining, courses, campus services, and administrative rules. It retrieves the closest chunks from a local vector store and has the model answer using only those, naming the source file. A relevance gate refuses questions that are too far from anything in the documents, instead of letting the model guess.
-
 ---
 
 # Unit 1
 
 ## What This Does
 
-<!-- Fill in: 3-4 sentences on your corpus and the kinds of questions your
-     system answers, written for someone who's never seen this repo. -->
+The Unofficial Guide answers plain questions about student life from a corpus of 88 short posts covering housing, dining, courses, campus services, and administrative rules. It retrieves the closest chunks from a local vector store and has the model answer using only those chunks, naming the source file. A relevance gate refuses questions that are too far from anything in the documents, instead of letting the model guess.
 
 ## Chunking Strategy
 
 **Chunk size:** no fixed size — split on paragraph breaks
 **Overlap:** none
 
-Most documents in campus_life are short (~317 chars avg) and read like two
-ideas glued together: a one-line title, then one or two paragraphs each
-covering a separate fact. The starter's 800-char window never even triggered
-on these, so I switched to splitting on blank lines instead.
+Most documents in campus_life are short (~317 chars avg) and read like two ideas glued together: a one-line title, then one or two paragraphs each covering a separate fact. The starter's 800-char window never triggered on these, so I switched to splitting on blank lines instead.
 
-One problem with a pure paragraph split: some documents have a short title
-line or a short trailing paragraph, and either would become its own
-near-empty chunk. So I set a 60-character floor — anything under that gets
-merged into the next paragraph (or the previous one, if it's the last piece
-in the doc).
+One problem with a pure paragraph split: some documents have a short title line or a short trailing paragraph, and either would become its own near-empty chunk. So I set a 60-character floor — anything under that gets merged into the next paragraph (or the previous one, if it's the last piece in the doc).
 
 Result: 88 docs -> 177 chunks, avg 156 chars (shortest 61, longest 397).
 
@@ -53,9 +43,7 @@ Start the term project in week three, not week eight; everyone learns this
 the hard way.
 ```
 
-Doesn't name CS 340 anywhere in the text — you only know the class from the
-source tag the pipeline attaches, not the chunk itself. Minor gap in short,
-title-less tail chunks.
+Doesn't name CS 340 anywhere in the text — you only know the class from the source tag the pipeline attaches, not the chunk itself. Minor gap in short, title-less tail chunks.
 
 **Chunk 3** — source: `course_stat_150.txt#0` — produced by: `chunker.py::split_documents`
 
@@ -87,16 +75,19 @@ Laundry costs $1.50 wash, $1.25 dry, coin or card. On noise: loud until
 about 1am on weekends, no enforced quiet hours.
 ```
 
-Two unrelated facts merged here because the laundry line alone was under
-60 characters. Both still read fine, but a noise question will also pull
-back laundry pricing. Real cost of the merge approach, not a bug.
+Two unrelated facts merged here because the laundry line alone was under 60 characters. Both still read fine, but a noise question will also pull back laundry pricing. This is a real cost of the merge approach, not a bug.
 
 ## Sample Answer
 
-Question: How much does a dryer cost in Fenwick Court?
-Answer: Based on housing_fenwick_court_laundry.txt, a dryer in Fenwick Court costs $1.75.
+**Question:** How much does a dryer cost in Fenwick Court?
 
-My relevance cutoff: 0.6. In-scope questions landed at 0.18-0.34 and out-of-scope at 0.79-0.92, with no overlap.
+**Answer:**
+
+```
+Based on `housing_fenwick_court_laundry.txt`, a dryer in Fenwick Court costs $1.75.
+```
+
+**My relevance cutoff:** 0.6. In-scope questions landed at 0.18–0.34 and out-of-scope questions at 0.79–0.92, with no overlap.
 
 | Question | In corpus? | Best distance |
 |---|---|---|
@@ -111,12 +102,12 @@ My relevance cutoff: 0.6. In-scope questions landed at 0.18-0.34 and out-of-scop
 | Ibuprofen dosage | No | 0.824 |
 | Rust for loop | No | 0.877 |
 
-
 ## How I Used AI
 
-1. My push was rejected and a rebase conflicted with questions I wrote last week. I pasted the error into Claude and asked what to do. It told me not to overwrite anything until we checked who wrote the remote's questions. I confirmed they were mine, aborted the rebase, and reset to my remote, which kept my work.
+**1.** My push was rejected and a rebase conflicted with questions I wrote last week. I pasted the error into Claude and asked what to do. It told me not to overwrite anything until we checked who wrote the remote's questions. I confirmed they were mine, aborted the rebase, and reset to my remote, which kept my work.
 
-2. I asked Claude for a command that prints the best distance for all ten questions at once. Its first draft used questions it had invented instead of mine, so I reran it using the list in questions.py, and re-indexed with my chunker so the numbers matched my 177 chunks.
+**2.** I asked Claude for a command that prints the best distance for all ten questions at once. Its first draft used questions it had invented instead of mine, so I reran it using the list in questions.py, and re-indexed with my chunker so the numbers matched my 177 chunks.
+
 ---
 
 # Unit 2
