@@ -2,14 +2,7 @@
 
 Nafisa Nawrin Labonno — campus_life corpus
 
-> **This file is your submission.** Fill it in as you go — most sections get
-> written during the milestone that produces them, not at the end.
->
-> How the starter works, and every command you'll need, is in `RUNNING.md`.
-> Leave that file alone.
->
-> **Paste everything as text.** No screenshots, no video. A typed table gets
-> full credit; a picture of the same table gets none.
+The Unofficial Guide answers plain questions about student life from a corpus of 88 short posts: housing, dining, courses, campus services, and administrative rules. It retrieves the closest chunks from a local vector store and has the model answer using only those, naming the source file. A relevance gate refuses questions that are too far from anything in the documents, instead of letting the model guess.
 
 ---
 
@@ -100,31 +93,30 @@ back laundry pricing. Real cost of the merge approach, not a bug.
 
 ## Sample Answer
 
-<!-- Fill in after Milestone 4: one full question + answer, with source line
-     visible, your relevance cutoff, and the 10-row distance table. -->
+Question: How much does a dryer cost in Fenwick Court?
+Answer: Based on housing_fenwick_court_laundry.txt, a dryer in Fenwick Court costs $1.75.
 
-**Question:**
-
-**Answer:**
-
-```
-```
-
-**My relevance cutoff:**
+My relevance cutoff: 0.6. In-scope questions landed at 0.18-0.34 and out-of-scope at 0.79-0.92, with no overlap.
 
 | Question | In corpus? | Best distance |
 |---|---|---|
-|  |  |  |
+| CS 210 lab percentage | Yes | 0.342 |
+| Kestrel Commons salad bar | Yes | 0.259 |
+| Fenwick Court dryer cost | Yes | 0.280 |
+| Campus store price-match | Yes | 0.294 |
+| Weekend shuttle frequency | Yes | 0.180 |
+| Capital of Mongolia | No | 0.787 |
+| Diesel oil change | No | 0.923 |
+| 1994 World Cup | No | 0.847 |
+| Ibuprofen dosage | No | 0.824 |
+| Rust for loop | No | 0.877 |
+
 
 ## How I Used AI
 
-<!-- Fill in: two specific moments — what you asked, what came back, what
-     you changed. -->
+1. My push was rejected and a rebase conflicted with questions I wrote last week. I pasted the error into Claude and asked what to do. It told me not to overwrite anything until we checked who wrote the remote's questions. I confirmed they were mine, aborted the rebase, and reset to my remote, which kept my work.
 
-**1.**
-
-**2.**
-
+2. I asked Claude for a command that prints the best distance for all ten questions at once. Its first draft used questions it had invented instead of mine, so I reran it using the list in questions.py, and re-indexed with my chunker so the numbers matched my 177 chunks.
 ---
 
 # Unit 2

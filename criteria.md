@@ -53,8 +53,7 @@ in at least 4 of 5 tries.
      just keep five of them, or the "4 of 5" above has nothing to be 4 of. -->
 
 **Why this target:**
-<!-- What did your distances look like when you set the cutoff in Milestone 4?
-     Was there a clean gap, or did the two groups overlap? -->
+At my 0.6 cutoff, my five in-scope questions came back between 0.18 and 0.34 and my five out-of-scope questions between 0.79 and 0.92, a clean gap with no overlap, so I expect 5 of 5 refusals. I kept the target at 4 of 5 because all five out-of-scope questions come from a completely different world. A nearby question would land much closer to the cutoff.
 
 ---
 
